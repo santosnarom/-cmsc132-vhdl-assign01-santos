@@ -5,13 +5,14 @@
 library IEEE; use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
+
 -- Entity Definition
-entity alarm_tb is -- constants are defined here
+entity t1l_santos_tb is -- constants are defined here
 	constant MAX_COMB: integer := 64; -- number of input combinations (8 bits)
 	constant DELAY: time := 10 ns; -- delay value in testing
-end entity alarm_tb;
+end entity t1l_santos_tb;
 
-architecture tb of alarm_tb is
+architecture tb of t1l_santos_tb is
 	signal output: std_logic; -- alarm indicator from the UUT
 	signal in_buzzer: std_logic_vector(2 downto 0); -- in buzzers
 	signal out_buzzer: std_logic_vector(2 downto 0); -- out buzzers
@@ -29,7 +30,7 @@ begin -- begin main body of the tb architecture
 
 	--main process: generate test vectors and check results
 	main: process is
-		variable temp: unsigned(7 downto 0); -- used in calculations
+		variable temp: unsigned(5 downto 0); -- used in calculations
 		variable expected_alarm: std_logic;
 		variable error_count: integer := 0; -- number of simulation errors
 
@@ -46,20 +47,20 @@ begin -- begin main body of the tb architecture
 			out_buzzer(1) <= std_logic(temp(1)); -- 2nd bit input
 			out_buzzer(0) <= std_logic(temp(0)); -- 1st bit input
 
-			-- compute expected values
-			expected_alarm := '0';
+			-- check alarm
+			if (out_buzzer(0)='1' and in_buzzer(0)='1') then expected_alarm := '1'; 
+			elsif (out_buzzer(0)='1' and in_buzzer(1)='1') then expected_alarm := '1'; 
+			elsif (out_buzzer(0)='1' and in_buzzer(2)='1') then expected_alarm := '1'; 
 
-			if (out_buzzer(0)=1 and in_buzzer(0)=1) then expected_alarm := '1'; 
-			if (out_buzzer(0)=1 and in_buzzer(1)=1) then expected_alarm := '1'; 
-			if (out_buzzer(0)=1 and in_buzzer(2)=1) then expected_alarm := '1'; 
+			elsif (out_buzzer(1)='1' and in_buzzer(0)='1') then expected_alarm := '1'; 
+			elsif (out_buzzer(1)='1' and in_buzzer(1)='1') then expected_alarm := '1'; 
+			elsif (out_buzzer(1)='1' and in_buzzer(2)='1') then expected_alarm := '1';
 
-			if (out_buzzer(1)=1 and in_buzzer(0)=1) then expected_alarm := '1'; 
-			if (out_buzzer(1)=1 and in_buzzer(1)=1) then expected_alarm := '1'; 
-			if (out_buzzer(1)=1 and in_buzzer(2)=1) then expected_alarm := '1';
+			elsif (out_buzzer(2)='1' and in_buzzer(0)='1') then expected_alarm := '1'; 
+			elsif (out_buzzer(2)='1' and in_buzzer(1)='1') then expected_alarm := '1'; 
+			elsif (out_buzzer(2)='1' and in_buzzer(2)='1') then expected_alarm := '1';
 
-			if (out_buzzer(2)=1 and in_buzzer(0)=1) then expected_alarm := '1'; 
-			if (out_buzzer(2)=1 and in_buzzer(1)=1) then expected_alarm := '1'; 
-			if (out_buzzer(2)=1 and in_buzzer(2)=1) then expected_alarm := '1';
+			else expected_alarm := '0';		
 
 			end if;
 
@@ -68,7 +69,7 @@ begin -- begin main body of the tb architecture
 			-- check if output of circuit is the same as the expected value
 			assert (expected_alarm = output)
 				report "ERROR: Expected output " &
-					std_logic'image(expected_alarm) & "and encoded " &
+					std_logic'image(expected_alarm) &
 					" at time " & time'image(now);
 
 			-- increment number of errors
