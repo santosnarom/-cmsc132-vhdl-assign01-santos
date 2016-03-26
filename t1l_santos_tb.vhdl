@@ -48,20 +48,8 @@ begin -- begin main body of the tb architecture
 			out_buzzer(0) <= std_logic(temp(0)); -- 1st bit input
 
 			-- check alarm
-
-			if (out_buzzer(0)='1' and in_buzzer(0)='1') then expected_alarm := '1'; 
-			elsif (out_buzzer(0)='1' and in_buzzer(1)='1') then expected_alarm := '1'; 
-			elsif (out_buzzer(0)='1' and in_buzzer(2)='1') then expected_alarm := '1'; 
-
-			elsif (out_buzzer(1)='1' and in_buzzer(0)='1') then expected_alarm := '1'; 
-			elsif (out_buzzer(1)='1' and in_buzzer(1)='1') then expected_alarm := '1'; 
-			elsif (out_buzzer(1)='1' and in_buzzer(2)='1') then expected_alarm := '1';
-
-			elsif (out_buzzer(2)='1' and in_buzzer(0)='1') then expected_alarm := '1'; 
-			elsif (out_buzzer(2)='1' and in_buzzer(1)='1') then expected_alarm := '1'; 
-			elsif (out_buzzer(2)='1' and in_buzzer(2)='1') then expected_alarm := '1';
-
-			else expected_alarm := '0';		
+			if((count < 9) or (count mod 8 = 0)) then expected_alarm := '0';
+			else expected_alarm := '1';		
 
 			end if;
 
