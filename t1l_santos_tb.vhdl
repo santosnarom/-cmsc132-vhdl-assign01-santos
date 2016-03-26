@@ -48,6 +48,7 @@ begin -- begin main body of the tb architecture
 			out_buzzer(0) <= std_logic(temp(0)); -- 1st bit input
 
 			-- check alarm
+
 			if (out_buzzer(0)='1' and in_buzzer(0)='1') then expected_alarm := '1'; 
 			elsif (out_buzzer(0)='1' and in_buzzer(1)='1') then expected_alarm := '1'; 
 			elsif (out_buzzer(0)='1' and in_buzzer(2)='1') then expected_alarm := '1'; 
@@ -69,7 +70,7 @@ begin -- begin main body of the tb architecture
 			-- check if output of circuit is the same as the expected value
 			assert (expected_alarm = output)
 				report "ERROR: Expected output " &
-					std_logic'image(expected_alarm) &
+					std_logic'image(expected_alarm) & " but output is " & std_logic'image(output) &
 					" at time " & time'image(now);
 
 			-- increment number of errors
